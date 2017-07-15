@@ -18,6 +18,7 @@
             android:onClick="onClick"
             android:text="@string/startGame"/>
         <Button
+            android:id="@+id/doubleModle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/doubleMoudle"/>
