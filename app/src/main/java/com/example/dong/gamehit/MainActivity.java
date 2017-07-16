@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -68,8 +69,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             }
             case R.id.about:{
-
+                break;
             }
+            case R.id.doubleModle:{
+                break;
+            }
+
             case R.id.exit:{
                 finish();
             }
