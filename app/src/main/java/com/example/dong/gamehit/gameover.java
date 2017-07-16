@@ -14,23 +14,20 @@ import android.widget.TextView;
 public class gameover extends AppCompatActivity implements View.OnClickListener{
 
     int score;
-    TextView textView;
+    TextView textview;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.gameover);
+
         Intent intent = getIntent();
         if (intent != null) {
             score = intent.getIntExtra("Score", 0);
         }
-        textView = (TextView) findViewById(R.id.finalscore);
-        score = 0;
-        //textView.setText(score + "");
-        //textView.append(score + "");
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.gameover);
+        textview = (TextView) findViewById(R.id.finalscore);
+        textview.setText(score + "");
     }
-
 
     @Override
     public void onClick(View v) {
@@ -41,11 +38,6 @@ public class gameover extends AppCompatActivity implements View.OnClickListener{
                 break;
             }
             case R.id.back: {
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.exit:{
                 finish();
             }
         }

@@ -1,12 +1,10 @@
 package com.example.dong.gamehit;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
@@ -58,7 +56,7 @@ public class hitting extends AppCompatActivity {
         }
     };
 
-     private void changeUI() {
+    private void changeUI() {
         if (time % 2 == 0)
             showtime.setText(--timeleft + "");
         if (nextlocation == -1)
@@ -133,8 +131,6 @@ public class hitting extends AppCompatActivity {
         integerButtonHashMap.put(14, fourteen);
         integerButtonHashMap.put(15, fifteen);
         integerButtonHashMap.put(16, sixteen);
-
-
     }
 
     //初始化Button与random值的对应关系
@@ -175,7 +171,6 @@ public class hitting extends AppCompatActivity {
         fourteen.setBackgroundResource(R.drawable.testhole);
         fifteen.setBackgroundResource(R.drawable.testhole);
         sixteen.setBackgroundResource(R.drawable.testhole);
-
     }
 
     @Override//界面开始时执行
@@ -200,7 +195,6 @@ public class hitting extends AppCompatActivity {
         if (intent != null){
             halt = intent.getIntExtra("status", 1000);
         }
-
     }
 
     @Override
@@ -243,11 +237,7 @@ public class hitting extends AppCompatActivity {
             if (hit == nextlocation){//打中
                 v.setBackgroundResource(R.drawable.bang);
                 showscore.setText((score += 10) + "");
-                v.setBackgroundResource(R.drawable.testhole);
                 nextlocation = -1;
-            }
-            else{
-                //没打中的处理
             }
         }
     }
@@ -259,6 +249,5 @@ public class hitting extends AppCompatActivity {
             hittingthread.interrupt();
             hittingthread = null;
         }
-
     }
 }

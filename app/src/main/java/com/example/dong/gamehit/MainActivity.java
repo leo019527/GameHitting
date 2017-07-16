@@ -8,7 +8,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -39,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         halt = 500;
                         break;
                 }
-
                 Intent intent = new Intent(MainActivity.this, hitting.class);
                 intent.putExtra("status", halt);
                 startActivity(intent);
@@ -48,11 +46,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listDialog.show();
     }
 
+    private void showNormalDialog() {
+        AlertDialog.Builder normalDialog = new AlertDialog.Builder(this);
+        normalDialog.setTitle("关于");
+        normalDialog.setMessage("北京交通大学计算机与信息技术学院专业实践与训练Ⅰ课程项目\n作者：董林华、李凌耀、陆金梁");
+        normalDialog.show();
+    }
+
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-
         }
     };
 
@@ -69,16 +73,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             }
             case R.id.about:{
+                showNormalDialog();
                 break;
             }
             case R.id.doubleModle:{
                 break;
             }
-
             case R.id.exit:{
-                finish();
+                System.exit(0);
             }
         }
-
     }
 }
