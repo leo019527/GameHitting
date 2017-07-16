@@ -115,7 +115,7 @@ public class hitting extends AppCompatActivity {
         sixteen.setOnClickListener(click);
     }
 
-    //random值与Button的对应关系
+    //初始化random值与Button的对应关系
     private void InitIntegerButtonHashMap(){
         integerButtonHashMap.put(1, one);
         integerButtonHashMap.put(2, two);
@@ -137,7 +137,7 @@ public class hitting extends AppCompatActivity {
 
     }
 
-    //Button与random值的对应关系
+    //初始化Button与random值的对应关系
     private void InitButtonIntegerHashMap(){
         buttonIntegerHashMap.put(one, 1);
         buttonIntegerHashMap.put(two, 2);
@@ -178,29 +178,6 @@ public class hitting extends AppCompatActivity {
 
     }
 
-    private void showListDialog() {
-        String[] items = {"简单","一般","困难"};
-        AlertDialog.Builder listDialog = new AlertDialog.Builder(this);
-        listDialog.setTitle("请选择难度：");
-        listDialog.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which){
-                    case 0:
-                        halt = 1500;
-                        break;
-                    case 1:
-                        halt = 1000;
-                        break;
-                    case 2:
-                        halt = 500;
-                        break;
-                }
-            }
-        });
-        listDialog.show();
-    }
-
     @Override//界面开始时执行
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -214,13 +191,16 @@ public class hitting extends AppCompatActivity {
         InitButtonIntegerHashMap();
         random = new Random();
         nextlocation = random.nextInt(16) + 1;
-        timeleft = 30;
+        timeleft = 2;
         time = 0;
         score = 0;
         showtime.setText(timeleft + "");
         showscore.setText(score + "");
-        halt = 1000;
-        //showListDialog();
+        Intent intent = getIntent();
+        if (intent != null){
+            halt = intent.getIntExtra("status", 1000);
+        }
+
     }
 
     @Override
@@ -243,10 +223,12 @@ public class hitting extends AppCompatActivity {
                             }
                         }
                     }
-
                     if (timeleft == 0){//时间到 结束游戏
                         Intent intention = new Intent(hitting.this, gameover.class);
-                        startActivity(intention);
+                        //intention.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+                        intention.putExtra("Score",score);
+                        hitting.this.startActivity(intention);
+                        finish();
                     }
                 }
             });
@@ -261,6 +243,8 @@ public class hitting extends AppCompatActivity {
             if (hit == nextlocation){//打中
                 v.setBackgroundResource(R.drawable.bang);
                 showscore.setText((score += 10) + "");
+                v.setBackgroundResource(R.drawable.testhole);
+                nextlocation = -1;
             }
             else{
                 //没打中的处理
@@ -275,7 +259,6 @@ public class hitting extends AppCompatActivity {
             hittingthread.interrupt();
             hittingthread = null;
         }
-        Intent intention = new Intent(hitting.this, gameover.class);
-        startActivity(intention);
+
     }
 }
