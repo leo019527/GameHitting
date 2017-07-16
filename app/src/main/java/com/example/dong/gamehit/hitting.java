@@ -186,7 +186,7 @@ public class hitting extends AppCompatActivity {
         InitButtonIntegerHashMap();
         random = new Random();
         nextlocation = random.nextInt(16) + 1;
-        timeleft = 2;
+        timeleft = 1;
         time = 0;
         score = 0;
         showtime.setText(timeleft + "");

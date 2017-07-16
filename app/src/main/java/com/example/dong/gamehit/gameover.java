@@ -35,6 +35,7 @@ public class gameover extends AppCompatActivity implements View.OnClickListener{
             case R.id.restart: {
                 Intent intent = new Intent(this, hitting.class);
                 startActivity(intent);
+                finish();
                 break;
             }
             case R.id.back: {
