@@ -1,5 +1,6 @@
 package com.example.dong.gamehit;
 
+import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
@@ -9,8 +10,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+import java.io.IOException;
+import java.util.Iterator;
 
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+    private static boolean isServer;
+    private static Intent intent = null;
     int halt;
 
     @Override
@@ -18,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         halt = 0;
+        intent = new Intent(this, DoubleActivity.class);
     }
 
     private void showListDialog() {
@@ -76,12 +82,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 showNormalDialog();
                 break;
             }
-            case R.id.doubleModle:{
-                break;
-            }
             case R.id.exit:{
                 System.exit(0);
             }
         }
+    }
+
+
+    public void doubleClisk(View view) {
+        //选择是否服务端
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this,android.R.style.Theme_Holo_Light_Dialog);
+        builder.setTitle("选择阵营");
+        final String[] choose = {"红色","黄色"};
+        builder.setItems(choose,new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+                if (which == 1)
+                {
+                    intent.putExtra("choose",true);
+                    startActivity(intent);
+                }
+                else
+                {
+                    intent.putExtra("choose",false);
+                    startActivity(intent);
+                }
+            }
+        });
+        builder.show();
     }
 }

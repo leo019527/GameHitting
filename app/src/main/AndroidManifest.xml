@@ -16,15 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".gameover">
-
-        </activity>
-
-        <activity android:name=".hitting">
-
-        </activity>
-
+        <activity android:name=".gameover" />
+        <activity android:name=".hitting" />
+        <activity android:name=".DoubleActivity"></activity>
     </application>
 
 </manifest>

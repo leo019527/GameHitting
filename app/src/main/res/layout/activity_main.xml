@@ -18,10 +18,11 @@
             android:onClick="onClick"
             android:text="@string/startGame"/>
         <Button
-            android:id="@+id/doubleModle"
+            android:id="@+id/doubles"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/doubleMoudle"/>
+            android:text="@string/doubleMoudle"
+            android:onClick="doubleClisk"/>
 
         <Button
             android:id="@+id/score"

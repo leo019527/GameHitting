@@ -5,4 +5,8 @@
     <string name="highScore">最高分</string>
     <string name="exit">退出</string>
     <string name="about">关于</string>
+
+    <string name="title_activity_double">DoubleActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>
