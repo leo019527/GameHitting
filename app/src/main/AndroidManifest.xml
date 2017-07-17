@@ -21,7 +21,10 @@
         </activity>
         <activity android:name=".gameover" />
         <activity android:name=".hitting" />
-        <activity android:name=".DoubleActivity"></activity>
+        <activity android:name=".rankscene"/>
+        <activity android:name=".DoubleActivity">
+
+        </activity>
     </application>
 
 </manifest>
