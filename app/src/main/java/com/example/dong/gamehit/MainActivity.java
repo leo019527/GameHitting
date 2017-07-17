@@ -110,7 +110,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(DialogInterface dialog, int which) {
                 if (which == 0)//红色
                 {
+                    Intent server = new Intent(a,DoubleActivity.class);
+                    startActivity(server);
+                    finish();
                 } else {
+                    Intent client = new Intent(a,Double2Activity.class);
+                    startActivity(client);
+                    finish();
                 }
             }
         });

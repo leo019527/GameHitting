@@ -9,4 +9,6 @@
     <string name="title_activity_double">DoubleActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="progress_connecting">正在连接</string>
+    <string name="progress_scaning">正在扫描</string>
 </resources>
