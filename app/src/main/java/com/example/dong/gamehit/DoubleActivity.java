@@ -79,8 +79,15 @@ public class DoubleActivity extends AppCompatActivity {
                 case BluetoothUtil.MESSAGE_READ: {
                     //别人打了地鼠
                     byte[] buf = msg.getData().getByteArray(BluetoothUtil.READ_MSG);
-                    String str = new String(buf,0,buf.length);
-                    int location = Integer.parseInt(str);
+                    int tmp=0;
+                    int i = 0;
+                    while(buf[i] != 0)
+                    {
+                        tmp = tmp*10+buf[i]-'0';
+                        i++;
+                    }
+                    tmp++;
+                    int location = tmp;
                     ImageButton v = integerButtonHashMap.get(location);
                     v.setBackgroundResource(R.drawable.bang2);
                     hisscore.setText((score += 10) + "");

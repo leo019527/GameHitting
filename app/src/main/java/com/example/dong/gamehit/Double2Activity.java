@@ -135,6 +135,10 @@ public class Double2Activity extends AppCompatActivity {
                 case BluetoothUtil.MESSAGE_WRITE:{
                     break;
                 }
+                case STATE_CHANGE:{
+                    changeUI();
+                    break;
+                }
                 default:
                     break;
             }
