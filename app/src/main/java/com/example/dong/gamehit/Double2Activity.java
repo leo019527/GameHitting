@@ -107,7 +107,7 @@ public class Double2Activity extends AppCompatActivity {
                     {
                         tmp=0;
                         i = 1;
-                        while(buf[i] != 0)
+                        while(buf[i] != '\0')
                         {
                             tmp = tmp*10+buf[i]-'0';
                             i++;
@@ -119,7 +119,7 @@ public class Double2Activity extends AppCompatActivity {
                     {
                         tmp=0;
                         i = 1;
-                        while(buf[i] != 0)
+                        while(buf[i] != '\0')
                         {
                             tmp = tmp*10+buf[i]-'0';
                             i++;
@@ -287,7 +287,7 @@ public class Double2Activity extends AppCompatActivity {
         showtime.setText(timeleft + "");
         yourscore.setText(score + "");
         hisscore.setText(score2+"");
-        halt = 2000;
+        halt = 1000;
     }
 
     private void initBluetooth() {
@@ -331,6 +331,7 @@ public class Double2Activity extends AppCompatActivity {
                     if (hittingthread != null) {
                         while (timeleft > 0) {
                             try {
+                                while(mBlthChatUtil.getState() != BluetoothUtil.STATE_CONNECTED);
                                 Thread.sleep(halt);
                                 time++;
                                 //对游戏界面做相应的改变
@@ -364,11 +365,7 @@ public class Double2Activity extends AppCompatActivity {
                 v.setBackgroundResource(R.drawable.bang2);
                 yourscore.setText((score += 10) + "");
                 String send = nextlocation+"";
-                try {
-                    mBlthChatUtil.write(send.getBytes("utf8"));
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
+                mBlthChatUtil.write((send+'\0').getBytes());
                 nextlocation = -1;
             }
         }

@@ -81,12 +81,11 @@ public class DoubleActivity extends AppCompatActivity {
                     byte[] buf = msg.getData().getByteArray(BluetoothUtil.READ_MSG);
                     int tmp=0;
                     int i = 0;
-                    while(buf[i] != 0)
+                    while(buf[i] != '\0')
                     {
                         tmp = tmp*10+buf[i]-'0';
                         i++;
                     }
-                    tmp++;
                     int location = tmp;
                     ImageButton v = integerButtonHashMap.get(location);
                     v.setBackgroundResource(R.drawable.bang2);
@@ -253,7 +252,7 @@ public class DoubleActivity extends AppCompatActivity {
         showtime.setText(timeleft + "");
         yourscore.setText(score + "");
         hisscore.setText(score2+"");
-        halt = 2000;
+        halt = 1000;
     }
 
     private void initBluetooth() {
@@ -313,7 +312,7 @@ public class DoubleActivity extends AppCompatActivity {
                                 while(!start);
                                 Thread.sleep(halt);
                                 nextlocation = random.nextInt(16) + 1;
-                                mBlthChatUtil.write(("T"+nextlocation).getBytes());
+                                mBlthChatUtil.write(("T"+nextlocation+'\0').getBytes());
                                 time++;
                                 //对游戏界面做相应的改变
 //                                handler.sendEmptyMessage(1);
@@ -345,8 +344,8 @@ public class DoubleActivity extends AppCompatActivity {
             if (hit == nextlocation){//打中
                 v.setBackgroundResource(R.drawable.bang);
                 yourscore.setText((score += 10) + "");
-                String send = nextlocation+"";
-                mBlthChatUtil.write(send.getBytes());
+                String send = hit+"";
+                mBlthChatUtil.write((send+'\0').getBytes());
                 nextlocation = -1;
             }
         }
