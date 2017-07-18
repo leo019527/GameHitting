@@ -80,6 +80,7 @@ public class Double2Activity extends AppCompatActivity {
     TextView hisscore;//别人的分数
     TextView showtime;//layout中的time
     Thread hittingthread;
+    private static boolean getmessage=false;
 
     //<editor-fold desc="handler">
     private Handler mHandler = new Handler(){
@@ -105,6 +106,7 @@ public class Double2Activity extends AppCompatActivity {
                     str = new String(buf,0,buf.length);
                     if(buf[0] == 'T')
                     {
+                        getmessage = true;
                         tmp=0;
                         i = 1;
                         while(buf[i] != '\0')
@@ -330,17 +332,14 @@ public class Double2Activity extends AppCompatActivity {
                 public void run() {
                     if (hittingthread != null) {
                         while (timeleft > 0) {
-                            try {
-                                while(mBlthChatUtil.getState() != BluetoothUtil.STATE_CONNECTED);
-                                Thread.sleep(halt);
-                                time++;
-                                //对游戏界面做相应的改变
+                            while(mBlthChatUtil.getState() != BluetoothUtil.STATE_CONNECTED);
+                            while(!getmessage);
+                            time++;
+                            //对游戏界面做相应的改变
 //                                handler.sendEmptyMessage(1);
-                                Message msg = mHandler.obtainMessage(STATE_CHANGE);
-                                mHandler.sendMessage(msg);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
+                            Message msg = mHandler.obtainMessage(STATE_CHANGE);
+                            mHandler.sendMessage(msg);
+                            getmessage = false;
                         }
                     }
                     if (timeleft == 0){//时间到 结束游戏
@@ -364,7 +363,7 @@ public class Double2Activity extends AppCompatActivity {
             if (hit == nextlocation){//打中
                 v.setBackgroundResource(R.drawable.bang2);
                 yourscore.setText((score += 10) + "");
-                String send = nextlocation+"";
+                String send = hit+"";
                 mBlthChatUtil.write((send+'\0').getBytes());
                 nextlocation = -1;
             }
