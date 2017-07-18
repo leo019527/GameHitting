@@ -246,7 +246,7 @@ public class DoubleActivity extends AppCompatActivity {
         showtime.setText(timeleft + "");
         yourscore.setText(score + "");
         hisscore.setText(score2+"");
-        halt = 250;
+        halt = 2000;
     }
 
     private void initBluetooth() {

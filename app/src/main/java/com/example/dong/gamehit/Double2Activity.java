@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -85,7 +86,10 @@ public class Double2Activity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             switch(msg.what){
                 case BluetoothUtil.STATE_CONNECTED:
-                    Toast.makeText(getApplicationContext(),"成功连接设备",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"成功连接设备2"+msg.getData().getString(BluetoothUtil.DEVICE_NAME),Toast.LENGTH_LONG).show();
+                    if(mProgressDialog.isShowing()){
+                        mProgressDialog.dismiss();
+                    }
                     break;
                 case BluetoothUtil.STATAE_CONNECT_FAILURE:
                     Toast.makeText(getApplicationContext(),"连接失败",Toast.LENGTH_LONG).show();
@@ -94,18 +98,34 @@ public class Double2Activity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"连接断开",Toast.LENGTH_LONG).show();
                     break;
                 case BluetoothUtil.MESSAGE_READ:{
+                    int tmp;
+                    int i;
                     byte[] buf = msg.getData().getByteArray(BluetoothUtil.READ_MSG);
-                    String str = new String(buf,0,buf.length);
-                    Toast.makeText(Double2Activity.this,str,Toast.LENGTH_LONG).show();
-                    if(str.startsWith("T"))
+                    String str = null;
+                    str = new String(buf,0,buf.length);
+                    if(buf[0] == 'T')
                     {
-                        str = str.substring(1,str.length());
-                        nextlocation = Integer.parseInt(str);
+                        tmp=0;
+                        i = 1;
+                        while(buf[i] != 0)
+                        {
+                            tmp = tmp*10+buf[i]-'0';
+                            i++;
+                        }
+                        tmp++;
+                        nextlocation = tmp;
                     }
                     else
                     {
-                        int location = Integer.parseInt(str);
-                        ImageButton v = integerButtonHashMap.get(location);
+                        tmp=0;
+                        i = 1;
+                        while(buf[i] != 0)
+                        {
+                            tmp = tmp*10+buf[i]-'0';
+                            i++;
+                        }
+                        tmp++;
+                        ImageButton v = integerButtonHashMap.get(tmp);
                         v.setBackgroundResource(R.drawable.bang);
                         hisscore.setText((score += 10) + "");
                         nextlocation = -1;
@@ -263,7 +283,7 @@ public class Double2Activity extends AppCompatActivity {
         showtime.setText(timeleft + "");
         yourscore.setText(score + "");
         hisscore.setText(score2+"");
-        halt = 250;
+        halt = 2000;
     }
 
     private void initBluetooth() {
@@ -289,8 +309,8 @@ public class Double2Activity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPostResume() {
-        super.onPostResume();
+    protected void onResume() {
+        super.onResume();
         if (mBlthChatUtil != null) {
             if (mBlthChatUtil.getState() == BluetoothUtil.STATE_CONNECTED){
                 BluetoothDevice device = mBlthChatUtil.getConnectedDevice();
@@ -300,11 +320,6 @@ public class Double2Activity extends AppCompatActivity {
                 }
             }
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         if (hittingthread == null){
             hittingthread = new Thread(new Runnable() {
                 @Override
@@ -345,7 +360,11 @@ public class Double2Activity extends AppCompatActivity {
                 v.setBackgroundResource(R.drawable.bang2);
                 yourscore.setText((score += 10) + "");
                 String send = nextlocation+"";
-                mBlthChatUtil.write(send.getBytes());
+                try {
+                    mBlthChatUtil.write(send.getBytes("utf8"));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
                 nextlocation = -1;
             }
         }
