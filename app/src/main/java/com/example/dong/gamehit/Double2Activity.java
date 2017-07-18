@@ -256,7 +256,7 @@ public class Double2Activity extends AppCompatActivity {
         InitIntegerButtonHashMap();
         InitButtonIntegerHashMap();
         nextlocation = 5;
-        timeleft = 1;
+        timeleft = 60;
         time = 0;
         score = 0;
         score2 = 0;

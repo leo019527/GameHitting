@@ -54,17 +54,21 @@ public class DoubleActivity extends AppCompatActivity {
     TextView hisscore;//别人的分数
     TextView showtime;//layout中的time
     Thread hittingthread;
+    private static boolean start=false;
 
 
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothUtil mBlthChatUtil;
+    private static boolean over=false;
 
     //<editor-fold desc="Handler">
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case BluetoothUtil.STATE_CONNECTED:
-                    Toast.makeText(getApplicationContext(),"成功连接设备",Toast.LENGTH_LONG).show();
+                    over = true;
+                    start=true;
+                    Toast.makeText(getApplicationContext(),"成功连接设备2",Toast.LENGTH_LONG).show();
                     break;
                 case BluetoothUtil.STATAE_CONNECT_FAILURE:
                     Toast.makeText(getApplicationContext(),"连接失败",Toast.LENGTH_LONG).show();
@@ -84,6 +88,7 @@ public class DoubleActivity extends AppCompatActivity {
                     break;
                 }
                 case BluetoothUtil.MESSAGE_WRITE: {
+                    Toast.makeText(DoubleActivity.this,"发送数据",Toast.LENGTH_LONG).show();
                     break;
                 }
                 case STATE_CHANGE:{
@@ -234,7 +239,7 @@ public class DoubleActivity extends AppCompatActivity {
         InitButtonIntegerHashMap();
         random = new Random();
         nextlocation = 5;
-        timeleft = 1;
+        timeleft = 60;
         time = 0;
         score = 0;
         score2 = 0;
@@ -285,6 +290,7 @@ public class DoubleActivity extends AppCompatActivity {
                 }
             }
         }
+//        while (!over);
     }
 
     @Override
@@ -297,6 +303,7 @@ public class DoubleActivity extends AppCompatActivity {
                     if (hittingthread != null) {
                         while (timeleft > 0) {
                             try {
+                                while(!start);
                                 Thread.sleep(halt);
                                 nextlocation = random.nextInt(16) + 1;
                                 mBlthChatUtil.write(("T"+nextlocation).getBytes());
