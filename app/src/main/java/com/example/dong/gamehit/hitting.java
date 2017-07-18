@@ -19,6 +19,7 @@ import java.util.Random;
 
 public class hitting extends AppCompatActivity {
 
+    public static final int STATE_CHANGE=1;
     //按钮组
     private ImageButton one;
     private ImageButton two;
@@ -52,7 +53,9 @@ public class hitting extends AppCompatActivity {
     Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            changeUI();
+            if(msg.what == STATE_CHANGE) {
+                changeUI();
+            }
         }
     };
 
@@ -211,7 +214,9 @@ public class hitting extends AppCompatActivity {
                                 nextlocation = random.nextInt(16) + 1;
                                 time++;
                                 //对游戏界面做相应的改变
-                                handler.sendEmptyMessage(1);
+//                                handler.sendEmptyMessage(1);
+                                Message msg = handler.obtainMessage(STATE_CHANGE);
+                                handler.sendMessage(msg);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
