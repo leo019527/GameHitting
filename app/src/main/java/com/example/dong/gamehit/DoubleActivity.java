@@ -89,7 +89,7 @@ public class DoubleActivity extends AppCompatActivity {
                     int location = tmp;
                     ImageButton v = integerButtonHashMap.get(location);
                     v.setBackgroundResource(R.drawable.bang2);
-                    hisscore.setText((score += 10) + "");
+                    hisscore.setText((score2 += 10) + "");
                     nextlocation = -1;
                     break;
                 }
@@ -245,7 +245,7 @@ public class DoubleActivity extends AppCompatActivity {
         InitButtonIntegerHashMap();
         random = new Random();
         nextlocation = 5;
-        timeleft = 60;
+        timeleft = 2;
         time = 0;
         score = 0;
         score2 = 0;
@@ -324,11 +324,20 @@ public class DoubleActivity extends AppCompatActivity {
                         }
                     }
                     if (timeleft == 0){//时间到 结束游戏
-                        Intent intention = new Intent(DoubleActivity.this, gameover.class);
-                        //intention.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-                        intention.putExtra("Score",score);
-                        intention.putExtra("Score2",score2);
-                        DoubleActivity.this.startActivity(intention);
+                        if(score >= score2)
+                        {
+                            Intent intent = new Intent(DoubleActivity.this,HighScore.class);
+                            intent.putExtra("MyScore",score);
+                            intent.putExtra("HisScore",score2);
+                            DoubleActivity.this.startActivity(intent);
+                        }
+                        else
+                        {
+                            Intent intent = new Intent(DoubleActivity.this,LowScore.class);
+                            intent.putExtra("MyScore",score);
+                            intent.putExtra("HisScore",score2);
+                            DoubleActivity.this.startActivity(intent);
+                        }
                         finish();
                     }
                 }

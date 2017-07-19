@@ -24,6 +24,8 @@
         <activity android:name=".rankscene" />
         <activity android:name=".DoubleActivity"></activity>
         <activity android:name=".Double2Activity"></activity>
+        <activity android:name=".HighScore"></activity>
+        <activity android:name=".LowScore"></activity>
     </application>
 
 </manifest>

@@ -114,7 +114,6 @@ public class Double2Activity extends AppCompatActivity {
                             tmp = tmp*10+buf[i]-'0';
                             i++;
                         }
-                        tmp++;
                         nextlocation = tmp;
                     }
                     else
@@ -129,7 +128,7 @@ public class Double2Activity extends AppCompatActivity {
 //                        tmp++;
                         ImageButton v = integerButtonHashMap.get(nextlocation);
                         v.setBackgroundResource(R.drawable.bang);
-                        hisscore.setText((score += 10) + "");
+                        hisscore.setText((score2 += 10) + "");
                         nextlocation = -1;
                     }
                     break;
@@ -282,14 +281,13 @@ public class Double2Activity extends AppCompatActivity {
         InitIntegerButtonHashMap();
         InitButtonIntegerHashMap();
         nextlocation = -1;
-        timeleft = 60;
+        timeleft = 2;
         time = 0;
         score = 0;
         score2 = 0;
         showtime.setText(timeleft + "");
         yourscore.setText(score + "");
         hisscore.setText(score2+"");
-        halt = 1000;
     }
 
     private void initBluetooth() {
