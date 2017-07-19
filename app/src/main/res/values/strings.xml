@@ -2,7 +2,7 @@
     <string name="app_name">打地鼠</string>
     <string name="doubleMoudle">双人模式</string>
     <string name="startGame">开始游戏</string>
-    <string name="highScore">最高分</string>
+    <string name="highScore">排行榜</string>
     <string name="exit">退出</string>
     <string name="about">关于</string>
 
