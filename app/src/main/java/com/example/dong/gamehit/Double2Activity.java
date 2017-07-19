@@ -119,15 +119,15 @@ public class Double2Activity extends AppCompatActivity {
                     }
                     else
                     {
-                        tmp=0;
-                        i = 1;
-                        while(buf[i] != '\0')
-                        {
-                            tmp = tmp*10+buf[i]-'0';
-                            i++;
-                        }
-                        tmp++;
-                        ImageButton v = integerButtonHashMap.get(tmp);
+//                        tmp=0;
+//                        i = 1;
+//                        while(buf[i] != '\0')
+//                        {
+//                            tmp = tmp*10+buf[i]-'0';
+//                            i++;
+//                        }
+//                        tmp++;
+                        ImageButton v = integerButtonHashMap.get(nextlocation);
                         v.setBackgroundResource(R.drawable.bang);
                         hisscore.setText((score += 10) + "");
                         nextlocation = -1;
@@ -281,7 +281,7 @@ public class Double2Activity extends AppCompatActivity {
         InitClick();
         InitIntegerButtonHashMap();
         InitButtonIntegerHashMap();
-        nextlocation = 5;
+        nextlocation = -1;
         timeleft = 60;
         time = 0;
         score = 0;

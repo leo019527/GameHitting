@@ -20,7 +20,6 @@ import java.util.UUID;
  */
 
 public class BluetoothUtil {
-    private static final String TAG = "BluetoothService";
     private static final boolean D = true;
 
     // 服务名 SDP
@@ -44,15 +43,12 @@ public class BluetoothUtil {
     public static final int STATAE_CONNECT_FAILURE = 4; //连接失败
 
     public static final int MESSAGE_DISCONNECTED = 5;
-    public static final int STATE_CHANGE = 6;
+    public static final int STATE_CHANGES = 6;
     public static final String DEVICE_NAME = "device_name";
     public static final int MESSAGE_READ = 7;
     public static final int MESSAGE_WRITE= 8;
     public static final String READ_MSG = "read_msg";
-    /**
-     * 构造函数。准备一个新的bluetoothchat会话。
-     * @param context
-     */
+
     private BluetoothUtil(Context context) {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mState = STATE_NONE;
@@ -71,19 +67,17 @@ public class BluetoothUtil {
     public void unregisterHandler(){
         mHandler = null;
     }
-    /**
+    /*
      * 设置当前状态的聊天连接
-     * @param state  整数定义当前连接状态
      */
     private synchronized void setState(int state) {
-        if (D) Log.d(TAG, "setState() " + mState + " -> " + state);
         mState = state;
-        // 给新状态的处理程序，界面活性可以更新
-        mHandler.obtainMessage(STATE_CHANGE, state, -1).sendToTarget();
+        mHandler.obtainMessage(STATE_CHANGES, state, -1).sendToTarget();
     }
 
-    /**
-     * 返回当前的连接状态。 */
+    /*
+     * 返回当前的连接状态。
+     */
     public synchronized int getState() {
         return mState;
     }
@@ -91,11 +85,10 @@ public class BluetoothUtil {
     public BluetoothDevice getConnectedDevice(){
         return mConnectedBluetoothDevice;
     }
-    /**
-     * 开始聊天服务。特别acceptthread开始
-     * 开始服务器模式。 */
+    /*
+     * 开始服务器模式。
+     */
     public synchronized void startListen() {
-        if (D) Log.d(TAG, "start");
         // 取消任何线程正在运行的连接
         if (mConnectedThread != null) {mConnectedThread.cancel(); mConnectedThread = null;}
         // 启动线程来监听一个bluetoothserversocket
@@ -106,12 +99,10 @@ public class BluetoothUtil {
         setState(STATE_LISTEN);
     }
 
-    /**
+    /*
      * 开始connectthread启动连接到远程设备。
-     * @param device 连接的蓝牙设备
      */
     public synchronized void connect(BluetoothDevice device) {
-        if (D) Log.d(TAG, "connect to: " + device);
         // 取消任何线程试图建立连接
         if (mState == STATE_CONNECTING) {
             if (mConnectThread != null) {mConnectThread.cancel(); mConnectThread = null;}
@@ -126,11 +117,8 @@ public class BluetoothUtil {
 
     /**
      * 开始ConnectedThread开始管理一个蓝牙连接,传输、接收数据.
-     * @param socket socket连接
-     * @param device 已连接的蓝牙设备
      */
     public synchronized void connected(BluetoothSocket socket, BluetoothDevice device) {
-        if (D) Log.d(TAG, "connected");
         //取消任何线程正在运行的连接
         if (mConnectedThread != null) {mConnectedThread.cancel(); mConnectedThread = null;}
         // 启动线程管理连接和传输
@@ -150,17 +138,14 @@ public class BluetoothUtil {
      * 停止所有的线程
      */
     public synchronized void disconnect() {
-        if (D) Log.d(TAG, "disconnect");
         if (mConnectThread != null) {mConnectThread.cancel(); mConnectThread = null;}
         if (mConnectedThread != null) {mConnectedThread.cancel(); mConnectedThread = null;}
         if (mAcceptThread != null) {mAcceptThread.cancel(); mAcceptThread = null;}
         setState(STATE_NONE);
     }
 
-    /**
-     * Write to the ConnectedThread in an unsynchronized manner
-     * @param out The bytes to write
-     * @see ConnectedThread#write(byte[])
+    /*
+     * 写入线程
      */
     public void write(byte[] out) {
         //创建临时对象
@@ -175,7 +160,7 @@ public class BluetoothUtil {
     }
 
     /**
-     * Indicate that the connection attempt failed and notify the UI Activity.
+     * 发送链接失败的消息
      */
     private void connectionFailed() {
         // 发送失败的信息带回活动
@@ -186,7 +171,7 @@ public class BluetoothUtil {
     }
 
     /**
-     * Indicate that the connection was lost and notify the UI Activity.
+     * 发送链接断开的消息
      */
     private void connectionLost() {
         // 发送失败的信息带回Activity
@@ -197,8 +182,8 @@ public class BluetoothUtil {
     }
 
     /**
-     *本线程 侦听传入的连接。
-     *它运行直到连接被接受（或取消）。
+     *  服务器线程 侦听传入的连接。
+     *  它运行直到连接被接受（或取消）。
      */
     private class AcceptThread extends Thread {
         // 本地服务器套接字
@@ -211,23 +196,19 @@ public class BluetoothUtil {
                         SERVICE_NAME, SERVICE_UUID);
                 //tmp = mAdapter.listenUsingInsecureRfcommWithServiceRecord(SERVICE_NAME, SERVICE_UUID);
             } catch (IOException e) {
-                Log.e(TAG, "listen() failed", e);
             }
             mServerSocket = tmp;
         }
 
         public void run() {
-            if (D) Log.d(TAG, "BEGIN mAcceptThread" + this);
             setName("AcceptThread");
             BluetoothSocket socket = null;
             // 循环，直到连接成功
             while (mState != STATE_CONNECTED) {
                 try {
                     // 这是一个阻塞调用 返回成功的连接
-                    // mServerSocket.close()在另一个线程中调用，可以中止该阻塞
                     socket = mServerSocket.accept();
                 } catch (IOException e) {
-                    Log.e(TAG, "accept() failed", e);
                     break;
                 }
                 // 如果连接被接受
@@ -245,30 +226,26 @@ public class BluetoothUtil {
                                 try {
                                     socket.close();
                                 } catch (IOException e) {
-                                    Log.e(TAG, "Could not close unwanted socket", e);
                                 }
                                 break;
                         }
                     }
                 }
             }
-            if (D) Log.i(TAG, "END mAcceptThread");
         }
 
         public void cancel() {
-            if (D) Log.d(TAG, "cancel " + this);
             try {
                 mServerSocket.close();
             } catch (IOException e) {
-                Log.e(TAG, "close() of server failed", e);
+                e.printStackTrace();
             }
         }
     }
 
 
     /**
-     * 本线程用来连接设备
-     *
+     * 客户端线程用来连接设备
      */
     private class ConnectThread extends Thread {
         private BluetoothSocket mmSocket;
@@ -281,13 +258,11 @@ public class BluetoothUtil {
                 mmSocket = device.createRfcommSocketToServiceRecord
                         (SERVICE_UUID);
             } catch (IOException e) {
-                Log.e(TAG, "create() failed", e);
                 mmSocket = null;
             }
         }
 
         public void run() {
-            Log.i(TAG, "BEGIN mConnectThread");
             try {
                 // socket 连接,该调用会阻塞，直到连接成功或失败
                 mmSocket.connect();
@@ -308,14 +283,12 @@ public class BluetoothUtil {
             try {
                 mmSocket.close();
             } catch (IOException e) {
-                Log.e(TAG, "close() of connect socket failed", e);
             }
         }
     }
 
     /**
-     * 本线程server 和client共用.
-     * 它处理所有传入和传出的数据。
+     * 传输数据线程
      */
     private class ConnectedThread extends Thread {
         private final BluetoothSocket mmSocket;
@@ -323,7 +296,6 @@ public class BluetoothUtil {
         private final OutputStream mmOutStream;
 
         public ConnectedThread(BluetoothSocket socket) {
-            Log.d(TAG, "create ConnectedThread");
             mmSocket = socket;
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
@@ -332,7 +304,6 @@ public class BluetoothUtil {
                 tmpIn = socket.getInputStream();
                 tmpOut = socket.getOutputStream();
             } catch (IOException e) {
-                Log.e(TAG, "没有创建临时sockets", e);
             }
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
@@ -352,7 +323,6 @@ public class BluetoothUtil {
                     msg.setData(bundle);
                     mHandler.sendMessage(msg);
                 } catch (IOException e) {
-                    Log.e(TAG, "disconnected", e);
                     connectionLost();
                     break;
                 }
@@ -369,7 +339,6 @@ public class BluetoothUtil {
                 mHandler.obtainMessage(MESSAGE_WRITE, -1, -1, buffer)
                         .sendToTarget();
             } catch (IOException e) {
-                Log.e(TAG, "Exception during write", e);
             }
         }
 
@@ -377,7 +346,6 @@ public class BluetoothUtil {
             try {
                 mmSocket.close();
             } catch (IOException e) {
-                Log.e(TAG, "close() of connect socket failed", e);
             }
         }
     }
