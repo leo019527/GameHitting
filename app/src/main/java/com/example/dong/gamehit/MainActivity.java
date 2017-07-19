@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             }
             case R.id.score: {
-                Intent intent = new Intent(this, score.class);
+                Intent intent = new Intent(this, rankscene.class);
                 startActivity(intent);
                 break;
             }
