@@ -57,19 +57,6 @@ public class rankscene extends AppCompatActivity implements View.OnClickListener
     public void initData() {
         MyDatabaseHelper dbHelper = new MyDatabaseHelper(this,"BookStore.db",null,1);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-//        ContentValues values = new ContentValues();
-//        values.put("name","Lujinliang");
-//        values.put("score",99);
-//        db.insert("Book",null,values);
-//        values.clear();
-//
-//        values.put("name","Cheng");
-//        values.put("score",90);
-//        db.insert("Book",null,values);
-//
-//        values.put("name", "Li");
-//        values.put("score",87);
-//        db.insert("Book", null, values);
 
         Cursor cursor = db.query("Book",null,null,null,null,null,null);
         if (cursor.moveToFirst()){

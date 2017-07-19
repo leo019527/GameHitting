@@ -343,11 +343,25 @@ public class Double2Activity extends AppCompatActivity {
                         }
                     }
                     if (timeleft == 0){//时间到 结束游戏
-                        Intent intention = new Intent(Double2Activity.this, gameover.class);
-                        //intention.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-                        intention.putExtra("Score",score);
-                        intention.putExtra("Score2",score2);
-                        Double2Activity.this.startActivity(intention);
+                        if(score >= score2)
+                        {
+                            Intent intent = new Intent(Double2Activity.this,HighScore.class);
+                            intent.putExtra("MyScore",score);
+                            intent.putExtra("HisScore",score2);
+                            Double2Activity.this.startActivity(intent);
+                        }
+                        else
+                        {
+                            Intent intent = new Intent(Double2Activity.this,LowScore.class);
+                            intent.putExtra("MyScore",score);
+                            intent.putExtra("HisScore",score2);
+                            Double2Activity.this.startActivity(intent);
+                        }
+//                        Intent intention = new Intent(Double2Activity.this, gameover.class);
+//                        //intention.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+//                        intention.putExtra("Score",score);
+//                        intention.putExtra("Score2",score2);
+//                        Double2Activity.this.startActivity(intention);
                         finish();
                     }
                 }
